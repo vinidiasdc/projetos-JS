@@ -52,7 +52,7 @@ class BancoDeDados {
       despesas.push(despesa)
     }
 
-    console.log(despesas)
+    return despesas
   }
 }
 
@@ -85,6 +85,14 @@ function cadastrarDespesa() {
     document.getElementById("modal_btn").innerHTML = "Voltar";
     document.getElementById("modal_btn").className = "btn btn-success";
     $('#modalRegistraDespesa').modal('show')
+
+    ano.value = ''
+    mes.value = ''
+    dia.value = ''
+    tipo.value = ''
+    descricao.value = ''
+    valor.value = ''
+    
   } else {
 
     document.getElementById("modal_titulo").innerHTML = "Impossível inserir dados";
@@ -97,5 +105,36 @@ function cadastrarDespesa() {
 }
 
 function carregarListaDespesas() {
-  banco.recuperarTodosRegistros()
+  let despesas = Array()
+  despesas = banco.recuperarTodosRegistros()
+
+  let listaDespesas = document.getElementById("listaDespesas")
+
+  despesas.forEach(function (d) {
+    let linha = listaDespesas.insertRow()
+
+    linha.insertCell(0).innerHTML = `${d.dia}/${d.mes}/${d.ano}`;
+
+    switch(d.tipo) {
+      case "1":
+        d.tipo = "Alimentação"
+        break;
+      case "2":
+        d.tipo = "Educação"
+        break;
+      case "3":
+        d.tipo = "Lazer"
+        break;
+      case "4":
+        d.tipo = "Saúde"
+        break;
+      case "5":
+        d.tipo = "Transporte"
+        break;
+    }
+
+    linha.insertCell(1).innerHTML = d.tipo
+    linha.insertCell(2).innerHTML = d.descricao
+    linha.insertCell(3).innerHTML = d.valor
+  })
 }
