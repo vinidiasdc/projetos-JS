@@ -7,6 +7,16 @@ class Despesa {
     this.descricao = descricao
     this.valor = valor
   }
+
+  validarDados() {
+      for(let i in this) {
+        if(this[i] == undefined || this[i] == '' || this[i] == null) {
+          return false
+        }
+      }
+
+      return true
+  }
 }
 
 class BancoDeDados {
@@ -23,10 +33,26 @@ class BancoDeDados {
   }
 
   gravar(d) {
-    debugger
     let id = this.getProximoId()
     localStorage.setItem('id', id)
     localStorage.setItem(id, JSON.stringify(d))
+  }
+
+  recuperarTodosRegistros() {
+    let id = localStorage.getItem('id')
+    let despesas = Array()
+
+    for(let i = 1; i <= id; i++) {
+      let despesa = JSON.parse(localStorage.getItem(i))
+
+      if(despesa == null) {
+        continue
+      }
+
+      despesas.push(despesa)
+    }
+
+    console.log(despesas)
   }
 }
 
@@ -50,5 +76,26 @@ function cadastrarDespesa() {
     valor.value
   )
 
-  banco.gravar(despesa)
+  if(despesa.validarDados()) {
+    banco.gravar(despesa)
+
+    document.getElementById("modal_titulo").innerHTML = "Registro inserido!";
+    document.getElementById("modal_titulo_div").className = "modal-header text-success";
+    document.getElementById("descricao_modal").innerHTML = "Despesa cadastrada com sucesso";
+    document.getElementById("modal_btn").innerHTML = "Voltar";
+    document.getElementById("modal_btn").className = "btn btn-success";
+    $('#modalRegistraDespesa').modal('show')
+  } else {
+
+    document.getElementById("modal_titulo").innerHTML = "Impossível inserir dados";
+    document.getElementById("modal_titulo_div").className = "modal-header text-danger";
+    document.getElementById("descricao_modal").innerHTML = "Por favor, verifique se todos os dados foram preenchidos";
+    document.getElementById("modal_btn").innerHTML = "Voltar e corrigir";
+    document.getElementById("modal_btn").className = "btn btn-danger";
+    $('#modalRegistraDespesa').modal('show')
+  }
+}
+
+function carregarListaDespesas() {
+  banco.recuperarTodosRegistros()
 }
