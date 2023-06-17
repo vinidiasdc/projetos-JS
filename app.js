@@ -54,6 +54,37 @@ class BancoDeDados {
 
     return despesas
   }
+
+  pesquisar(despesa) {
+    debugger
+    let despesasFiltradas = this.recuperarTodosRegistros()
+
+    if(despesa.ano != '') {
+      despesasFiltradas = despesasFiltradas.filter(d => d.ano == despesa.ano)
+    }
+
+    if(despesa.mes != '') {
+      despesasFiltradas = despesasFiltradas.filter(d => d.mes == despesa.mes)
+    }
+
+    if(despesa.dia != '') {
+      despesasFiltradas = despesasFiltradas.filter(d => d.dia == despesa.dia)
+    }
+
+    if(despesa.tipo != '') {
+      despesasFiltradas = despesasFiltradas.filter(d => d.tipo == despesa.tipo)
+    }
+
+    if(despesa.descricao != '') {
+      despesasFiltradas = despesasFiltradas.filter(d => d.descricao == despesa.descricao)
+    }
+
+    if(despesa.valor != '') {
+      despesasFiltradas = despesasFiltradas.filter(d => d.valor == despesa.valor)
+    }
+
+    console.log(despesasFiltradas)
+  }
 }
 
 let banco = new BancoDeDados();
@@ -137,4 +168,17 @@ function carregarListaDespesas() {
     linha.insertCell(2).innerHTML = d.descricao
     linha.insertCell(3).innerHTML = d.valor
   })
+}
+
+function pesquisarDespesas() {
+  let ano = document.getElementById('ano').value
+  let mes = document.getElementById('mes').value
+  let dia = document.getElementById('dia').value
+  let tipo = document.getElementById('tipo').value
+  let descricao = document.getElementById('descricao').value
+  let valor = document.getElementById('valor').value
+
+  despesa = new Despesa(ano, mes, dia, tipo, descricao, valor)
+
+  banco.pesquisar(despesa)
 }
